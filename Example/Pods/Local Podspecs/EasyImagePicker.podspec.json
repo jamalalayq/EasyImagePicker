@@ -1,0 +1,22 @@
+{
+  "name": "EasyImagePicker",
+  "version": "0.1.0",
+  "summary": "A short description of EasyImagePicker.",
+  "description": "TODO: Add long description of the pod here.",
+  "homepage": "https://github.com/gemgemo/EasyImagePicker",
+  "license": {
+    "type": "MIT",
+    "file": "LICENSE"
+  },
+  "authors": {
+    "gemgemo": "gemgemo@users.noreply.github.com"
+  },
+  "source": {
+    "git": "https://github.com/gemgemo/EasyImagePicker.git",
+    "tag": "0.1.0"
+  },
+  "platforms": {
+    "ios": "8.0"
+  },
+  "source_files": "EasyImagePicker/Classes/**/*"
+}

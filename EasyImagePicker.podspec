@@ -9,7 +9,7 @@
 Pod::Spec.new do |s|
   s.name             = 'EasyImagePicker'
   s.version          = '0.1.0'
-  s.summary          = 'A short description of EasyImagePicker.'
+  s.summary          = 'picking image quickly.'
 
 # This description is used to generate tags and improve search results.
 #   * Think: What does it do? Why did you write it? What is the focus?
@@ -18,17 +18,17 @@ Pod::Spec.new do |s|
 #   * Finally, don't worry about the indent, CocoaPods strips it!
 
   s.description      = <<-DESC
-TODO: Add long description of the pod here.
+Sample swift class save time and effort when picking images.
                        DESC
 
   s.homepage         = 'https://github.com/gemgemo/EasyImagePicker'
   # s.screenshots     = 'www.example.com/screenshots_1', 'www.example.com/screenshots_2'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
-  s.author           = { 'gemgemo' => 'gemgemo@users.noreply.github.com' }
+  s.author           = { 'Gamal' => 'gamalal3yk@gmail.com' }
   s.source           = { :git => 'https://github.com/gemgemo/EasyImagePicker.git', :tag => s.version.to_s }
   # s.social_media_url = 'https://twitter.com/<TWITTER_USERNAME>'
 
-  s.ios.deployment_target = '8.0'
+  s.ios.deployment_target = '10.0'
 
   s.source_files = 'EasyImagePicker/Classes/**/*'
   

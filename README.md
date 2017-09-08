@@ -20,9 +20,44 @@ it, simply add the following line to your Podfile:
 pod 'EasyImagePicker'
 ```
 
+## Usage
+
+```swift
+class ViewController: UIViewController {
+
+    private var imagePicker: ImagePicker?
+
+    @IBOutlet private weak var imageView: UIImageView!
+
+    internal override func viewDidLoad() {
+        super.viewDidLoad()
+        imagePicker = ImagePicker()
+        imagePicker?.alertMessage = "from camera or library"
+        imagePicker?.alertTitle = "pick image"
+        imagePicker?.onCancel = {
+            debugPrint("picking canceled by user!")
+        }
+        imagePicker?.onError = {
+            debugPrint("error occurred!")
+        }
+        imagePicker?.onPickImage = { [weak self] (pickedIamge, picker) in
+            self?.imageView.image = picker.resize(this: pickedIamge, by: CGSize(width: 200, height: 200)) //picker.reduce(this: pickedIamge, to: 0.20)//
+        }
+    }
+
+
+    @IBAction private func pickImageOnClick(_ sender: UIButton) {
+        imagePicker?.pickeImage()
+    }
+
+
+}
+
+```
+
 ## Author
 
-gemgemo, gemgemo@users.noreply.github.com
+Gamal, gamalal3yk@gmail.com
 
 ## License
 

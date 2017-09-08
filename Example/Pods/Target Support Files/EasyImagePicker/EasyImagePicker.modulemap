@@ -1,0 +1,6 @@
+framework module EasyImagePicker {
+  umbrella header "EasyImagePicker-umbrella.h"
+
+  export *
+  module * { export * }
+}
