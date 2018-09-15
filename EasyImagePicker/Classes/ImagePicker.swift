@@ -6,58 +6,76 @@
 
 import UIKit
 import MobileCoreServices
+import AVFoundation
 
 public typealias ImagePickerDelegate = UIImagePickerControllerDelegate & UINavigationControllerDelegate
 
+public enum PickingType {
+    case picture, video
+}
 
-public final class ImagePicker: NSObject {
+
+public final class ImagePicker: NSObject
+{
     
     private var picker: UIImagePickerController?
     
-    public var onPickImage: ((UIImage, ImagePicker)->())?, onCancel: (()->())?, placeholderImage = UIImage(), alertTitle, alertMessage: String?, tintColor = UIColor.darkGray, cameraTitle = "Camera", libraryTitle = "Library", cancelTitle = "Cancel", onError: (()->())?
+    public var onPickImage: ((UIImage, ImagePicker)->())?,
+    onCancel: (()->())?,
+    placeholderImage = UIImage(),
+    alertTitle, alertMessage: String?,
+    tintColor = UIColor.darkGray,
+    cameraTitle = "Camera", libraryTitle = "Library", cancelTitle = "Cancel",
+    onError: (()->())?,
+    onPickVideoURL: ((URL, ImagePicker)->())?
     
     /// TODO:- picking image
-    public func pickeImage() -> Void {
+    public func pick(in screen: UIViewController?, type: PickingType = .picture) -> Void {
         picker = UIImagePickerController()
         picker?.delegate = self
         picker?.allowsEditing = true
-        picker?.mediaTypes = [kUTTypeImage as String]
+        picker?.mediaTypes = [ type == .picture ? kUTTypeImage as String : kUTTypeMovie as String]
         let alert = UIAlertController(title: alertTitle ?? "", message: alertMessage ?? "", preferredStyle: .alert)
         alert.view.layer.cornerRadius = 4.0
         alert.view.tintColor = tintColor
         alert.addAction(UIAlertAction(title: cancelTitle, style: .cancel, handler: { [weak self] (action) in
             NSLog("tell user something in `onCancel` block because he cancel picking")
             self?.onCancel?()
+            self?.onCancel = .none
         }))
         alert.addAction(UIAlertAction(title: cameraTitle, style: .default, handler: { [weak self] (action) in
             guard UIImagePickerController.isSourceTypeAvailable(.camera) else {
                 NSLog("tell user something in `onError` block because camera not available")
                 self?.onError?()
+                self?.onError = .none
                 return
             }
             self?.picker?.sourceType = .camera
             guard let picker = self?.picker else {
                 NSLog("use `onError` block because ImagePicker is null")
                 self?.onError?()
+                self?.onError = .none
                 return
             }
-            UIApplication.shared.keyWindow?.rootViewController?.present(picker, animated: true)
+            screen?.present(picker, animated: true)
         }))
         alert.addAction(UIAlertAction(title: libraryTitle, style: .default, handler: { [weak self] (action) in
             guard UIImagePickerController.isSourceTypeAvailable(.photoLibrary) else {
                 NSLog("tell user something in `onError` block because photoLibrary not available")
                 self?.onError?()
+                self?.onError = .none
                 return
             }
             self?.picker?.sourceType = .photoLibrary
             guard let picker = self?.picker else {
                 NSLog("use `onError` block because ImagePicker is null")
                 self?.onError?()
+                self?.onError = .none
                 return
             }
-            UIApplication.shared.keyWindow?.rootViewController?.present(picker, animated: true)
-        }))        
-        UIApplication.shared.keyWindow?.rootViewController?.present(alert, animated: true)
+            screen?.present(picker, animated: true)
+        }))
+        screen?.present(alert, animated: true)
     }
     
     
@@ -97,7 +115,14 @@ public final class ImagePicker: NSObject {
         return UIImage(data: imageData, scale: scale)
     }
     
-
+    public func getThumbnailImage(for url: URL) -> UIImage? {
+        let asset = AVAsset.init(url: url)
+        let imageGenerator = AVAssetImageGenerator.init(asset: asset)
+        imageGenerator.appliesPreferredTrackTransform = true
+        guard let cgImage = try? imageGenerator.copyCGImage(at: CMTimeMakeWithSeconds(1, 1), actualTime: .none) else { return .none }
+        return UIImage.init(cgImage: cgImage)
+    }
+    
 }
 
 
@@ -109,35 +134,24 @@ extension ImagePicker: ImagePickerDelegate  {
     }
     
     public func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
-        var pickedImage: UIImage
-        if let originalPhoto = info[UIImagePickerControllerOriginalImage] as? UIImage {
-            pickedImage = originalPhoto
-        } else if let editedImage = info[UIImagePickerControllerEditedImage] as? UIImage {
-            pickedImage = editedImage
+        if let videoURL = info[UIImagePickerControllerMediaURL] as? URL {
+            onPickVideoURL?(videoURL, self)
+            onPickVideoURL = .none
         } else {
-            pickedImage = placeholderImage
+            var pickedImage = placeholderImage
+            if let editedImage = info[UIImagePickerControllerEditedImage] as? UIImage {
+                pickedImage = editedImage
+            } else if let originalPhoto = info[UIImagePickerControllerOriginalImage] as? UIImage {
+                pickedImage = originalPhoto
+            }
+            NSLog("user picking image you can find it in `onPickImage` block")
+            onPickImage?(pickedImage, self)
+            onPickImage = .none
         }
-        NSLog("user picking image you can find it in `onPickImage` block")
-        onPickImage?(pickedImage, self)
         picker.dismiss(animated: true)
     }
     
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
