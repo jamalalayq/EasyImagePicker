@@ -30,7 +30,7 @@ Sample swift class save time and effort when picking images.
 
   s.ios.deployment_target = '10.0'
 
-  s.source_files = 'EasyImagePicker/Classes/**/*'
+  s.source_files = 'EasyImagePicker/Classes/**/*.{swift}'
   
   # s.resource_bundles = {
   #   'EasyImagePicker' => ['EasyImagePicker/Assets/*.png']
