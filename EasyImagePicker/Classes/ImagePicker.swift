@@ -1,8 +1,9 @@
+//
 //  ImagePicker.swift
-//  ImagePicker
-//  Created by GeMoOo on 9/8/17.
-//  Copyright © 2017 GeMoOo. All rights reserved.
-
+//
+//  Created by Jamal Alayq on 9/8/17.
+//
+//  Copyright © 2017 Jamal Alayq. All rights reserved.
 
 import UIKit
 import MobileCoreServices
@@ -10,141 +11,171 @@ import AVFoundation
 
 public typealias ImagePickerDelegate = UIImagePickerControllerDelegate & UINavigationControllerDelegate
 
-public enum PickingType {
-    case picture, video
-}
-
-
-public final class ImagePicker: NSObject
-{
+public final class ImagePicker: NSObject {
     
     private var picker: UIImagePickerController?
-    
+    private var tune: Tuning!
     public var onPickImage: ((UIImage, ImagePicker)->())?,
-    onCancel: (()->())?,
-    placeholderImage = UIImage(),
-    alertTitle, alertMessage: String?,
-    tintColor = UIColor.darkGray,
-    cameraTitle = "Camera", libraryTitle = "Library", cancelTitle = "Cancel",
+    onCancel: (()->())?,    
     onError: (()->())?,
     onPickVideoURL: ((URL, ImagePicker)->())?
     
-    /// TODO:- picking image
-    public func pick(in screen: UIViewController?, type: PickingType = .picture) -> Void {
+    // MARK:- Inits
+    
+    public override init() {
+        super.init()
         picker = UIImagePickerController()
         picker?.delegate = self
         picker?.allowsEditing = true
-        picker?.mediaTypes = [ type == .picture ? kUTTypeImage as String : kUTTypeMovie as String]
-        let alert = UIAlertController(title: alertTitle ?? "", message: alertMessage ?? "", preferredStyle: .alert)
-        alert.view.layer.cornerRadius = 4.0
-        alert.view.tintColor = tintColor
-        alert.addAction(UIAlertAction(title: cancelTitle, style: .cancel, handler: { [weak self] (action) in
-            NSLog("tell user something in `onCancel` block because he cancel picking")
+    }
+    
+    /// TODO:- picking image
+    public func pick(with tuning: Tuning) -> Void {
+        self.tune = tuning
+        guard tune.screen != nil else { fatalError("screen must have value.") }
+        picker?.mediaTypes = [tune.type == .picture ? kUTTypeImage as String : kUTTypeMovie as String]
+        switch tune.mode {
+        case .default:
+            openFromDefaultMode()
+        case .custom(let choice):
+            switch choice {
+            case .camera: openCamera()
+            case .library: openPhotoLibrary()
+            }
+        }
+    }
+    
+}
+
+// MARK:- Private functions
+
+private extension ImagePicker {
+    
+    func openFromDefaultMode() {
+        let alert = UIAlertController(title: tune.alertTitle ?? "", message: tune.alertMessage ?? "", preferredStyle: .alert)
+        alert.view.tintColor = tune.tintColor
+        alert.addAction(UIAlertAction(title: tune.cancelTitle, style: .cancel, handler: { [weak self] _ in
+            print(#function, "tell user something in `onCancel` block because he cancel picking")
             self?.onCancel?()
             self?.onCancel = .none
         }))
-        alert.addAction(UIAlertAction(title: cameraTitle, style: .default, handler: { [weak self] (action) in
-            guard UIImagePickerController.isSourceTypeAvailable(.camera) else {
-                NSLog("tell user something in `onError` block because camera not available")
-                self?.onError?()
-                self?.onError = .none
-                return
-            }
-            self?.picker?.sourceType = .camera
-            guard let picker = self?.picker else {
-                NSLog("use `onError` block because ImagePicker is null")
-                self?.onError?()
-                self?.onError = .none
-                return
-            }
-            screen?.present(picker, animated: true)
+        alert.addAction(UIAlertAction(title: tune.cameraTitle, style: .default, handler: { [weak self] _ in
+            self?.openCamera()
         }))
-        alert.addAction(UIAlertAction(title: libraryTitle, style: .default, handler: { [weak self] (action) in
-            guard UIImagePickerController.isSourceTypeAvailable(.photoLibrary) else {
-                NSLog("tell user something in `onError` block because photoLibrary not available")
-                self?.onError?()
-                self?.onError = .none
-                return
-            }
-            self?.picker?.sourceType = .photoLibrary
-            guard let picker = self?.picker else {
-                NSLog("use `onError` block because ImagePicker is null")
-                self?.onError?()
-                self?.onError = .none
-                return
-            }
-            screen?.present(picker, animated: true)
+        alert.addAction(UIAlertAction(title: tune.libraryTitle, style: .default, handler: { [weak self] _ in
+            self?.openPhotoLibrary()
         }))
-        screen?.present(alert, animated: true)
+        tune.screen?.present(alert, animated: true)
     }
     
+    func openPhotoLibrary() {
+        guard UIImagePickerController.isSourceTypeAvailable(.photoLibrary) else {
+            print(#function, "tell user something in `onError` block because photoLibrary not available")
+            onError?()
+            onError = .none
+            return
+        }
+        picker?.sourceType = .photoLibrary
+        guard let picker = picker else {
+            print(#function, "use `onError` block because ImagePicker is null")
+            onError?()
+            onError = .none
+            return
+        }
+        tune.screen?.present(picker, animated: true)
+    }
     
-    // TODO:- resize image dimensions
-    public func resize(this image: UIImage, by size: CGSize, _ isOpaque: Bool = false) -> UIImage? {
-        debugPrint("old size: \(image.size)")
+    func openCamera() {
+        guard UIImagePickerController.isSourceTypeAvailable(.camera) else {
+            print(#function, "tell user something in `onError` block because camera not available")
+            onError?()
+            onError = .none
+            return
+        }
+        picker?.sourceType = .camera
+        guard let picker = picker else {
+            print(#function, "use `onError` block because ImagePicker is null")
+            onError?()
+            onError = .none
+            return
+        }
+        tune.screen?.present(picker, animated: true)
+    }
+    
+}
+
+// MARK:- Public functions
+
+public extension ImagePicker {
+    
+    // TODO: resize image dimensions
+    func resize(this image: UIImage,
+                by size: CGSize,
+                _ isOpaque: Bool = false,
+                _ scale: CGFloat = UIScreen.main.scale) -> UIImage? {
+        print(#function, "old size: \(image.size)")
         let horizontalRatio = size.width / image.size.width
         let verticalRatio = size.height / image.size.height
         let ratio = max(horizontalRatio, verticalRatio)
         let newSize = CGSize(width: image.size.width * ratio, height: image.size.height * ratio)
-        debugPrint("new size: \(newSize)")
-        var newImage: UIImage?
+        print(#function, "new size: \(newSize)")
         if #available(iOS 10.0, *) {
             let renderFormat = UIGraphicsImageRendererFormat.default()
             renderFormat.opaque = isOpaque
+            renderFormat.scale = scale
             let renderer = UIGraphicsImageRenderer(size: newSize, format: renderFormat)
-            newImage = renderer.image { (context) in
+            return renderer.image { _ in
                 image.draw(in: CGRect(x: 0, y: 0, width: newSize.width, height: newSize.height))
             }
         } else {
-            UIGraphicsBeginImageContextWithOptions(newSize, isOpaque, UIScreen.main.scale)
+            UIGraphicsBeginImageContextWithOptions(newSize, isOpaque, scale)
             image.draw(in: CGRect(x: 0, y: 0, width: newSize.width, height: newSize.height))
-            newImage = UIGraphicsGetImageFromCurrentImageContext()
+            let newImage = UIGraphicsGetImageFromCurrentImageContext()
             UIGraphicsEndImageContext()
+            return newImage
         }
-        return newImage
     }
     
-    
-    // TODO:- reduce image quality
-    public func reduce(this image: UIImage, to quality: CGFloat, _ scale: CGFloat = UIScreen.main.scale) -> UIImage? {
-        debugPrint("size before reduce image: \(UIImagePNGRepresentation(image) ?? Data())")
-        guard let imageData = UIImageJPEGRepresentation(image, quality) else {
-            return nil
-        }
-        debugPrint("size after reduce image: \(imageData)")
+    // TODO: reduce image quality
+    func reduce(this image: UIImage, to quality: CGFloat, _ scale: CGFloat = UIScreen.main.scale) -> UIImage? {
+        print(#function, "size before reduce image: \(image.jpegData(compressionQuality: 1) ?? .init())")
+        guard let imageData = image.jpegData(compressionQuality: quality) else { return .none }
+        print(#function, "size after reduce image: \(imageData)")
         return UIImage(data: imageData, scale: scale)
     }
     
-    public func getThumbnailImage(for url: URL) -> UIImage? {
+    // TODO: Take cover photo
+    func getThumbnailImage(for url: URL) -> UIImage? {
         let asset = AVAsset.init(url: url)
         let imageGenerator = AVAssetImageGenerator.init(asset: asset)
         imageGenerator.appliesPreferredTrackTransform = true
-        guard let cgImage = try? imageGenerator.copyCGImage(at: CMTimeMakeWithSeconds(1, 1), actualTime: .none) else { return .none }
+        guard let cgImage = try? imageGenerator.copyCGImage(at: CMTimeMakeWithSeconds(1, preferredTimescale: 1), actualTime: .none) else { return .none }
         return UIImage.init(cgImage: cgImage)
     }
     
 }
 
+// MARK:- Image Picker Delegate functions
 
 extension ImagePicker: ImagePickerDelegate  {
     
     public func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
-        NSLog("tell user something in `onCancel` block because he cancel picking")
+        print(#function, "tell user something in `onCancel` block because he cancel picking")
         picker.dismiss(animated: true, completion: onCancel)
     }
     
-    public func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
-        if let videoURL = info[UIImagePickerControllerMediaURL] as? URL {
+    public func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
+        if let videoURL = info[.mediaURL] as? URL {
             onPickVideoURL?(videoURL, self)
             onPickVideoURL = .none
         } else {
-            var pickedImage = placeholderImage
-            if let editedImage = info[UIImagePickerControllerEditedImage] as? UIImage {
+            var pickedImage = tune.placeholderImage
+            if let editedImage = info[.editedImage] as? UIImage {
                 pickedImage = editedImage
-            } else if let originalPhoto = info[UIImagePickerControllerOriginalImage] as? UIImage {
+            } else if let originalPhoto = info[.originalImage] as? UIImage {
                 pickedImage = originalPhoto
             }
-            NSLog("user picking image you can find it in `onPickImage` block")
+            print(#function, "user picking image you can find it in `onPickImage` block")
             onPickImage?(pickedImage, self)
             onPickImage = .none
         }
@@ -152,17 +183,3 @@ extension ImagePicker: ImagePickerDelegate  {
     }
     
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-

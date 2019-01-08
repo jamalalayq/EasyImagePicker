@@ -10,6 +10,7 @@
 		0C0B1FB9AE36C965E51E86112F5FF0F8 /* EasyImagePicker-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 3B311032D3D1B1FB3FF83FB6EC5E6B8E /* EasyImagePicker-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2169438E889AB82AB2EC9ECFFF8CDD2C /* Pods-EasyImagePicker_Example-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = B13AA97300966F35A45D26EA6185D64B /* Pods-EasyImagePicker_Example-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3FC6C2DD06B75BBD1D182384755A5A8E /* Pods-EasyImagePicker_Tests-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 97E22091821EB3C27C92F224B744CEB0 /* Pods-EasyImagePicker_Tests-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		51D5193A21E54378000A88DC /* Tuning.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51D5193921E54378000A88DC /* Tuning.swift */; };
 		70FDB52BF4EDD27EDE8D2809FE096597 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6604A7D69453B4569E4E4827FB9155A9 /* Foundation.framework */; };
 		96F718E595A042AB5A090C0D731A189A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6604A7D69453B4569E4E4827FB9155A9 /* Foundation.framework */; };
 		BAFE647CA350BD05B1C3F773C94A4A2E /* Pods-EasyImagePicker_Tests-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F9324A85F1885194E8D9018016718C8 /* Pods-EasyImagePicker_Tests-dummy.m */; };
@@ -38,6 +39,7 @@
 		354CDAC10423BC0A5677A5DA1F6A0A50 /* Pods-EasyImagePicker_Tests-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-EasyImagePicker_Tests-acknowledgements.markdown"; sourceTree = "<group>"; };
 		3B311032D3D1B1FB3FF83FB6EC5E6B8E /* EasyImagePicker-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "EasyImagePicker-umbrella.h"; sourceTree = "<group>"; };
 		4890E48B7EE0CE00C0DB9A739E9D3733 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		51D5193921E54378000A88DC /* Tuning.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Tuning.swift; path = EasyImagePicker/Classes/Tuning.swift; sourceTree = "<group>"; };
 		5DDCF7412156E06EA707D6ECA55565EF /* Pods_EasyImagePicker_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_EasyImagePicker_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		653F671EC8495BC68CDB4A1E1A9F9FC7 /* Pods-EasyImagePicker_Example-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-EasyImagePicker_Example-acknowledgements.markdown"; sourceTree = "<group>"; };
 		6604A7D69453B4569E4E4827FB9155A9 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS10.3.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
@@ -132,6 +134,7 @@
 		8B6FEF241D22A5D300E99976E2BEE91C /* EasyImagePicker */ = {
 			isa = PBXGroup;
 			children = (
+				51D5193921E54378000A88DC /* Tuning.swift */,
 				17B3E3996596E108C01623A198388FF7 /* ImagePicker.swift */,
 				902FBA2D693D9541618BF4CBB1F8828A /* Support Files */,
 			);
@@ -298,7 +301,7 @@
 				LastUpgradeCheck = 0940;
 				TargetAttributes = {
 					4B2F399EEC78A7EE1EF3C918D849E4EA = {
-						LastSwiftMigration = 0940;
+						LastSwiftMigration = 1010;
 					};
 				};
 			};
@@ -342,6 +345,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				51D5193A21E54378000A88DC /* Tuning.swift in Sources */,
 				FC54F7895729475F7591040C8B5BD86B /* EasyImagePicker-dummy.m in Sources */,
 				EB5879A520C7DDCFEACD5418EAEFE07F /* ImagePicker.swift in Sources */,
 			);
@@ -387,8 +391,7 @@
 				SKIP_INSTALL = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
-				SWIFT_SWIFT3_OBJC_INFERENCE = On;
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
@@ -534,8 +537,7 @@
 				SKIP_INSTALL = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_SWIFT3_OBJC_INFERENCE = On;
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
