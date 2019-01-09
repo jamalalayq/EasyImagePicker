@@ -30,7 +30,7 @@
 		8ABD9E9D8E17627217AAE4A0 /* Pods_EasyImagePicker_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_EasyImagePicker_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A9A53F7157D4371913E593C5 /* Pods-EasyImagePicker_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EasyImagePicker_Tests.release.xcconfig"; path = "Pods/Target Support Files/Pods-EasyImagePicker_Tests/Pods-EasyImagePicker_Tests.release.xcconfig"; sourceTree = "<group>"; };
 		D9E0C7D9EA033149408080D6 /* Pods-EasyImagePicker_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EasyImagePicker_Tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-EasyImagePicker_Tests/Pods-EasyImagePicker_Tests.debug.xcconfig"; sourceTree = "<group>"; };
-		E3FD086392881B8FCB58992F /* EasyImagePicker.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = EasyImagePicker.podspec; path = ../EasyImagePicker.podspec; sourceTree = "<group>"; };
+		E3FD086392881B8FCB58992F /* EasyImagePicker.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = EasyImagePicker.podspec; path = ../EasyImagePicker.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		F9223011485076A4B9C0319C /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
