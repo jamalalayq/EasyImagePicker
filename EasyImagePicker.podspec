@@ -8,8 +8,8 @@
 
 Pod::Spec.new do |s|
   s.name             = 'EasyImagePicker'
-  s.version          = '0.5.0'
-  s.swift_version    = '4.2'
+  s.version          = '1.0.0'
+  s.swift_version    = '5.0'
   s.summary          = 'picking image quickly.'
 
 # This description is used to generate tags and improve search results.
@@ -22,12 +22,12 @@ Pod::Spec.new do |s|
 Sample swift class save time and effort when picking images.
                        DESC
 
-  s.homepage         = 'https://github.com/gemgemo/EasyImagePicker'
+  s.homepage         = 'https://github.com/jamalalayq/EasyImagePicker'
   # s.screenshots     = 'www.example.com/screenshots_1', 'www.example.com/screenshots_2'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
-  s.author           = { 'Gamal' => 'gamalal3yk@gmail.com' }
-  s.source           = { :git => 'https://github.com/gemgemo/EasyImagePicker.git', :tag => s.version.to_s }
-  # s.social_media_url = 'https://twitter.com/<TWITTER_USERNAME>'
+  s.author           = { 'Jamal' => 'gamalal3yk@gmail.com' }
+  s.source           = { :git => 'https://github.com/jamalalayq/EasyImagePicker.git', :tag => s.version.to_s }
+  s.social_media_url = 'https://twitter.com/jamalelayeq'
 
   s.ios.deployment_target = '10.0'
 
