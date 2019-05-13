@@ -28,8 +28,9 @@ class ViewController: UIViewController {
         imagePicker?.onError = {
             debugPrint("error occurred!")
         }
-        imagePicker?.onPickImage = { [weak self] (pickedIamge, picker) in
-            let reducedImage = picker.reduce(this: pickedIamge, to: 0.50) ?? .init()
+        imagePicker?.onPickImage = { [weak self] (resource, picker) in
+            print(#function, resource.name, resource.extension, resource.url)
+            let reducedImage = picker.reduce(this: resource.image, to: 0.50) ?? .init()
             let sizedImage = picker.resize(this: reducedImage, by: CGSize(width: 200, height: 200))
             self?.imageView.image = sizedImage
         }

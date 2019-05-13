@@ -15,7 +15,7 @@ public final class ImagePicker: NSObject {
     
     private var picker: UIImagePickerController?
     private var tune: Tuning!
-    public var onPickImage: ((UIImage, ImagePicker)->())?,
+    public var onPickImage: ((Resource, ImagePicker)->())?,
     onCancel: (()->())?,    
     onError: (()->())?,
     onPickVideoURL: ((URL, ImagePicker)->())?
@@ -164,7 +164,8 @@ extension ImagePicker: ImagePickerDelegate  {
         picker.dismiss(animated: true, completion: onCancel)
     }
     
-    public func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
+    public func imagePickerController(_ picker: UIImagePickerController,
+                                      didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
         if let videoURL = info[.mediaURL] as? URL {
             onPickVideoURL?(videoURL, self)
             onPickVideoURL = .none
@@ -175,11 +176,27 @@ extension ImagePicker: ImagePickerDelegate  {
             } else if let originalPhoto = info[.originalImage] as? UIImage {
                 pickedImage = originalPhoto
             }
+            var url: URL?
+            var name: String = NSUUID().uuidString
+            var ext: String = "jpeg"
+            if #available(iOS 11.0, *) {
+                url = info[.imageURL] as? URL
+                name = url?.lastPathComponent ?? "IMAGE_\(NSUUID().uuidString)"
+                ext = url?.pathExtension ?? ""
+            }
+            let resource = Resource(name: name, extension: ext, image: pickedImage, url: url)
             print(#function, "user picking image you can find it in `onPickImage` block")
-            onPickImage?(pickedImage, self)
+            onPickImage?(resource, self)
             onPickImage = .none
         }
         picker.dismiss(animated: true)
     }
     
+}
+
+public struct Resource {
+    public let name: String
+    public let `extension`: String
+    public let image: UIImage
+    public let url: URL?
 }
