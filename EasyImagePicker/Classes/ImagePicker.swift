@@ -182,7 +182,7 @@ extension ImagePicker: ImagePickerDelegate  {
             if #available(iOS 11.0, *) {
                 url = info[.imageURL] as? URL
                 name = url?.lastPathComponent ?? "IMAGE_\(NSUUID().uuidString)"
-                ext = url?.pathExtension ?? ""
+                ext = url?.pathExtension ?? "jpeg"
             }
             let resource = Resource(name: name, extension: ext, image: pickedImage, url: url)
             print(#function, "user picking image you can find it in `onPickImage` block")

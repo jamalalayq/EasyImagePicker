@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'EasyImagePicker'
-  s.version          = '1.1.0'
+  s.version          = '1.1.1'
   s.swift_version    = '5.0'
   s.summary          = 'picking image quickly.'
 
